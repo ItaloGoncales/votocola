@@ -20,9 +20,7 @@
         "monochromeImage": "./assets/brand/android-adaptive-monochrome.png",
         "backgroundColor": "#141036"
       },
-      "permissions": [
-        "com.google.android.gms.permission.AD_ID"
-      ]
+      "permissions": ["com.google.android.gms.permission.AD_ID"]
     },
     "web": {
       "bundler": "metro",
@@ -50,9 +48,7 @@
           "androidAppId": "ca-app-pub-6785676183694375~7554440359",
           "iosAppId": "ca-app-pub-6785676183694375~2054701666",
           "userTrackingUsageDescription": "Usamos esta permissão só para exibir anúncios mais relevantes, que mantêm o VotoCola gratuito. Suas escolhas de candidatos nunca saem do seu celular.",
-          "skAdNetworkItems": [
-            "cstr6suwn9.skadnetwork"
-          ]
+          "skAdNetworkItems": ["cstr6suwn9.skadnetwork"]
         }
       ],
       "expo-build-properties",
