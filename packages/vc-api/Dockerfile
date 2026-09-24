@@ -10,6 +10,8 @@ RUN chown node:node /app
 FROM base AS deps
 USER node
 COPY --chown=node:node package.json yarn.lock .yarnrc.yml ./
+# Yarn 4 versionado no repositório (yarnPath do .yarnrc.yml).
+COPY --chown=node:node .yarn/releases ./.yarn/releases
 COPY --chown=node:node scripts ./scripts
 COPY --chown=node:node packages/vc-api/package.json packages/vc-api/
 COPY --chown=node:node packages/vc-app/package.json packages/vc-app/
