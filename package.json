@@ -1,0 +1,31 @@
+{
+  "name": "votocerto",
+  "private": true,
+  "version": "0.0.0",
+  "description": "VotoCola - colinha para as eleições 2026",
+  "packageManager": "yarn@4.18.0+sha512.fcb8716fe7cd0eece141ffc18b92193a9df9204c1ba83189c288835223fc0bbe64af473bab0d5e9927a7daeb5caf2bb07eb2787cc9338ca040ea125f2a1f2f7e",
+  "engines": {
+    "node": ">=24.21.0 <25",
+    "yarn": ">=4.18.0 <5"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "preinstall": "node scripts/check-engines.cjs",
+    "api": "yarn --cwd packages/vc-api",
+    "app": "yarn --cwd packages/vc-app",
+    "build": "yarn workspaces foreach -Apt run build",
+    "dev:api": "yarn --cwd packages/vc-api start:dev",
+    "dev:app": "yarn --cwd packages/vc-app start",
+    "lint": "yarn workspaces foreach -Apt run lint",
+    "test": "yarn workspaces foreach -Apt run test",
+    "format": "prettier --write \"**/*.{ts,tsx,js,cjs,mjs,json,md,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,cjs,mjs,json,md,yml,yaml}\"",
+    "docker:up": "docker compose up --build",
+    "docker:down": "docker compose down"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2"
+  }
+}

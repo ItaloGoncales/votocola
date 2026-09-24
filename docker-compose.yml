@@ -1,0 +1,51 @@
+# Ambiente de desenvolvimento local: `yarn docker:up` (ou `docker compose up --build`).
+# Para testar a imagem de produção da API: `docker compose -f docker-compose.yml -f docker-compose.prod.yml up --build`.
+# O app (Expo) roda fora do Docker: `yarn dev:app`.
+
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-votocerto}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-votocerto}
+      POSTGRES_DB: ${DB_NAME:-votocerto}
+    ports:
+      - '${DB_PORT:-5433}:5432'
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: packages/vc-api/Dockerfile
+      target: dev
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PORT: 4000
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: ${DB_USER:-votocerto}
+      DB_PASSWORD: ${DB_PASSWORD:-votocerto}
+      DB_NAME: ${DB_NAME:-votocerto}
+      DB_LOGGING: ${DB_LOGGING:-false}
+      PUBLIC_URL: ${PUBLIC_URL:-http://localhost:4000}
+      CORS_ORIGINS: ${CORS_ORIGINS:-}
+    ports:
+      - '${API_PORT:-4000}:4000'
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/packages/vc-api/node_modules
+      - /app/packages/vc-app/node_modules
+
+volumes:
+  db-data:

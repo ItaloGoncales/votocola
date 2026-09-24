@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{TITLE}} · VotoCola</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #fff;
+        --fg: #1a1633;
+        --muted: #5b5680;
+        --brand: #0a7a4a;
+        --line: #e4e1f2;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #141036;
+          --fg: #f7f6ff;
+          --muted: #aba6d8;
+          --brand: #5fd49a;
+          --line: #3b3486;
+        }
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+        font:
+          16px/1.6 -apple-system,
+          'Segoe UI',
+          Roboto,
+          Arial,
+          sans-serif;
+      }
+      main {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 24px 20px 48px;
+      }
+      .brand {
+        font-weight: 800;
+        font-size: 20px;
+        text-decoration: none;
+        color: var(--fg);
+      }
+      .brand b {
+        color: var(--brand);
+      }
+      h1 {
+        font-size: 28px;
+        line-height: 1.2;
+        margin: 20px 0 4px;
+      }
+      h2 {
+        font-size: 18px;
+        margin-top: 28px;
+      }
+      .meta {
+        color: var(--muted);
+        margin-top: 0;
+        font-size: 14px;
+      }
+      .summary {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 12px 16px;
+      }
+      a {
+        color: var(--brand);
+      }
+      .todo {
+        background: #ffe07a;
+        color: #141036;
+        padding: 0 4px;
+        border-radius: 4px;
+      }
+      nav {
+        margin-top: 32px;
+        padding-top: 16px;
+        border-top: 1px solid var(--line);
+        font-size: 14px;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <a class="brand" href="/termos">Voto<b>Cola</b>.</a>
+      {{BODY}}
+      <nav>
+        <a href="/termos">Termos de uso</a> · <a href="/privacidade">Política de privacidade</a>
+      </nav>
+    </main>
+  </body>
+</html>

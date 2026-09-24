@@ -1,0 +1,44 @@
+# dependencies
+node_modules/
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# build output
+dist/
+build/
+out/
+*.tsbuildinfo
+coverage/
+
+# env
+.env
+.env.*
+!.env.example
+
+# logs / os / editor
+*.log
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# dados do TSE (baixados à parte) e arquivos servidos pela API
+dados/
+packages/vc-api/storage/*
+!packages/vc-api/storage/.gitkeep
+
+# expo
+.expo/
+expo-env.d.ts
+ios/
+android/
+
+# túnel de desenvolvimento (src/dev/tunnel.ts)
+packages/vc-api/.tunnel.json
+packages/vc-api/.tunnel.log

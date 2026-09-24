@@ -1,0 +1,8 @@
+node_modules
+dist
+coverage
+.yarn
+yarn.lock
+packages/vc-app/uniwind-types.d.ts
+.expo
+dados

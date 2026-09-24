@@ -1,0 +1,36 @@
+@import 'tailwindcss';
+@import 'uniwind';
+
+/* Sem isto o Tailwind não enxerga as classes usadas fora da pasta app/. */
+@source './src';
+
+/*
+ * Tema único (escuro) do VotoCola, derivado da bandeira em tons pastel sobre #141036:
+ * verde 009440 -> brand, amarelo FFCB00 -> sun, azul 302681 -> sky, branco -> ink.
+ * voto: azul do logo (0B4A9A) clareado para ter contraste sobre o fundo.
+ * Use estes tokens em vez de cores cruas do Tailwind. Espelho em src/theme.ts.
+ *
+ * Daltonismo: a posição política usa escala divergente laranja <-> azul (segura para
+ * protanopia, deuteranopia e tritanopia) e nunca aparece só como cor (texto + régua de pontos).
+ */
+@theme {
+  --color-canvas: #141036;
+  --color-surface: #1d1850;
+  --color-raised: #28226a;
+  --color-line: #3b3486;
+  --color-ink: #f7f6ff;
+  --color-muted: #aba6d8;
+
+  --color-voto: #6c9cf5;
+  --color-brand: #5fd49a;
+  --color-brand-press: #4bbd85;
+  --color-sun: #ffe07a;
+  --color-sky: #aab4ff;
+  --color-danger: #ffa08c;
+
+  --color-pos-left: #f4a259;
+  --color-pos-center-left: #f8cfa0;
+  --color-pos-center: #dcd8f0;
+  --color-pos-center-right: #a9c8f0;
+  --color-pos-right: #6fa8e8;
+}

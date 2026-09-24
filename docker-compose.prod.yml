@@ -1,0 +1,6 @@
+# Override para rodar a imagem de produção localmente (smoke test do build).
+services:
+  api:
+    build:
+      target: prod
+    volumes: !reset []

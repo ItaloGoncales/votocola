@@ -1,0 +1,11 @@
+**/node_modules
+**/dist
+**/coverage
+.git
+.yarn/cache
+.env
+.env.*
+dados
+packages/vc-api/storage
+*.log
+**/.expo
