@@ -41,7 +41,7 @@ Gerados em `docs/loja/graficos/`:
 
 - **Ícone** 512×512: `icone-512.png`
 - **Gráfico de recursos** 1024×500: `grafico-recursos-1024x500.png`
-- **Capturas de tela do celular** 1080×1920: `captura-*.png`
+- **Capturas de tela do celular** 1080×1920 (5, para ser elegível a destaque): `captura-1` a `captura-5`. A colinha, a busca e o perfil usam **candidatos e partidos fictícios** (avatares DiceBear "notionists", CC0), para não associar o app a nenhum candidato real.
 
 ## Classificação do conteúdo (questionário IARC)
 
@@ -51,6 +51,11 @@ Gerados em `docs/loja/graficos/`:
 - Compartilha a localização do usuário: **Não**
 - Compras digitais: **Não**
 - Resultado esperado: **Livre**
+
+## Declarações
+
+- **ID de publicidade:** Sim (o SDK do AdMob declara a permissão AD_ID)
+- **App governamental:** Não
 
 ## Público-alvo e conteúdo
 
@@ -68,12 +73,12 @@ Coerente com a política de privacidade. O próprio app não coleta dados pessoa
 - **Todos os dados são criptografados em trânsito?** Sim
 - **Os usuários podem pedir a exclusão dos dados?** Não há dados vinculados ao usuário no app; os dados de anúncios são controlados nas configurações do Google (explicado na política)
 
-| Tipo de dado                                                 | Coletado | Compartilhado | Finalidade                                                | Opcional? |
-| ------------------------------------------------------------ | -------- | ------------- | --------------------------------------------------------- | --------- |
-| Local aproximado (derivado do IP pelo AdMob)                 | Sim      | Sim           | Publicidade ou marketing; prevenção a fraudes e segurança | Não       |
-| Interações com o app (interações com anúncios)               | Sim      | Sim           | Publicidade ou marketing; análise                         | Não       |
-| Diagnóstico (falhas e desempenho do SDK de anúncios)         | Sim      | Sim           | Análise                                                   | Não       |
-| Identificadores do dispositivo ou outros (ID de publicidade) | Sim      | Sim           | Publicidade ou marketing; prevenção a fraudes e segurança | Não       |
+Os quatro tipos abaixo (do SDK do AdMob), todos **coletados e compartilhados**, com as mesmas finalidades: **Analytics**, **Advertising or marketing** e **Fraud prevention, security, and compliance**.
+
+- Local aproximado (derivado do IP)
+- Interações com o app (interações com anúncios)
+- Diagnóstico (falhas e desempenho do SDK)
+- Identificadores do dispositivo ou outros (ID de publicidade)
 
 Marcar como **processado de forma temporária**: nenhum. **Obrigatório** (não opcional): todos, porque o SDK de anúncios roda para todos os usuários.
 
