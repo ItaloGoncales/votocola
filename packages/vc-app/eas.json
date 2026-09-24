@@ -10,10 +10,20 @@
     },
     "preview": {
       "distribution": "internal",
-      "android": { "buildType": "apk" }
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://votocola.nexti.dev/graphql",
+        "EXPO_PUBLIC_SHARE_URL": "votocola.nexti.dev"
+      }
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://votocola.nexti.dev/graphql",
+        "EXPO_PUBLIC_SHARE_URL": "votocola.nexti.dev"
+      }
     }
   },
   "submit": {

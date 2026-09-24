@@ -27,8 +27,9 @@ import { PartiesModule } from './modules/parties/parties.module.js';
       driver: buildGraphqlConfig(undefined).driver,
       useFactory: (config: ConfigService) => buildGraphqlConfig(config.get('NODE_ENV')),
     }),
-    // Limite geral por IP.
-    ThrottlerModule.forRoot([{ ttl: 60_000, limit: 120 }]),
+    // Limite geral por IP. Alto de propósito: operadoras de celular (CGNAT) põem muitos usuários
+    // atrás do mesmo IP; o objetivo é só barrar robôs. Requer TRUST_PROXY atrás de proxy.
+    ThrottlerModule.forRoot([{ ttl: 60_000, limit: 1200 }]),
     DatabaseModule.forRoot(),
     PublicUrlModule,
     AttributesModule,

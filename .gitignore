@@ -42,3 +42,6 @@ android/
 # túnel de desenvolvimento (src/dev/tunnel.ts)
 packages/vc-api/.tunnel.json
 packages/vc-api/.tunnel.log
+
+# pacote temporário de fotos/planos (scripts/deploy/upload-storage.sh)
+storage.tgz

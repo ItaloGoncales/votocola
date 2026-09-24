@@ -9,3 +9,4 @@ dados
 packages/vc-api/storage
 *.log
 **/.expo
+storage.tgz

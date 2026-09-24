@@ -13,7 +13,9 @@ COPY --chown=node:node package.json yarn.lock .yarnrc.yml ./
 COPY --chown=node:node scripts ./scripts
 COPY --chown=node:node packages/vc-api/package.json packages/vc-api/
 COPY --chown=node:node packages/vc-app/package.json packages/vc-app/
-RUN yarn install --immutable
+# Só as dependências da API (sem Expo/React Native do app): imagem menor e build mais rápido.
+# O package.json do app entra só para o Yarn resolver o workspace.
+RUN yarn workspaces focus @votocerto/api
 
 # ---- dev: código vem via volume no docker-compose ----
 FROM deps AS dev
@@ -31,7 +33,7 @@ FROM deps AS prod-deps
 RUN yarn workspaces focus @votocerto/api --production
 
 # ---- runtime ----
-# Fotos e planos ficam em /app/packages/vc-api/storage: monte um volume ou use um bucket/CDN.
+# Fotos e planos ficam em /app/packages/vc-api/storage: monte um volume (fly.toml) ou use um CDN.
 FROM base AS prod
 ENV NODE_ENV=production
 USER node

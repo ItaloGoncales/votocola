@@ -24,8 +24,8 @@ export class CandidatesResolver {
     return this.candidatesService.findById(id);
   }
 
-  /** Soma visualização/escolha (só totais; o app conta 1 vez por candidato). Limite por IP. */
-  @Throttle({ default: { limit: 60, ttl: 60_000 } })
+  /** Soma visualização/escolha (só totais; o app conta 1 vez por candidato). Limite por IP (CGNAT). */
+  @Throttle({ default: { limit: 600, ttl: 60_000 } })
   @Mutation(() => Boolean)
   trackCandidate(@Args() { candidateId, kind }: TrackArgs): Promise<boolean> {
     return this.interactions.track(candidateId, kind);

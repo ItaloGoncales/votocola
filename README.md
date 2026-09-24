@@ -80,6 +80,24 @@ Servidos pela API em `/termos` e `/privacidade` (texto em `packages/vc-api/src/l
 - **Testar do zero**: `expo start -c` limpa só o cache do Metro (o JavaScript empacotado), não os dados do app. Para voltar ao estado de instalação nova, use o botão **Resetar app (dev)** no fim da colinha (só existe em desenvolvimento; mantém o identificador do aparelho para não inflar a popularidade) ou limpe os dados do app nas configurações do celular (no Expo Go, isso apaga os dados de todos os projetos).
 - Use `npx expo install <pacote>` (não `yarn add`) e rode `npx expo-doctor` após atualizar.
 
+## Deploy da API (Fly.io, região São Paulo)
+
+Configuração em [fly.toml](fly.toml): 1 máquina `shared-cpu-1x` de 512 MB sempre ligada, volume `votocola_storage` para fotos e planos, `TRUST_PROXY=1` (sem isso o rate limit veria todos com o IP do proxy). O Postgres fica fora do Fly (ex.: Supabase gratuito em São Paulo, usando a URL do pooler em modo sessão).
+
+```bash
+fly apps create votocola
+fly volumes create votocola_storage --region gru --size 1
+fly secrets set DATABASE_URL='postgresql://...' \
+  LEGAL_CONTROLLER='Nome fantasia (Razão social, CNPJ ...)' \
+  LEGAL_CONTACT_EMAIL=contato@exemplo.com
+DATABASE_URL='postgresql://...' scripts/deploy/load-db.sh   # copia o banco local já importado
+fly deploy                                                     # migrations rodam ao iniciar
+scripts/deploy/upload-storage.sh                              # fotos + planos para o volume (via túnel HTTPS)
+fly certs add votocola.nexti.dev   # e crie no DNS o registro que o comando indicar
+```
+
+Os builds `preview` e `production` do app (EAS) já apontam para `https://votocola.nexti.dev/graphql` ([eas.json](packages/vc-app/eas.json)).
+
 ## Publicação (EAS)
 
 ```bash

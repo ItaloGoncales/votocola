@@ -8,6 +8,14 @@ const here = fileURLToPath(new URL('.', import.meta.url));
 // Compilado (dist) só carrega .js; rodando direto do source carrega .ts. Evita pegar .d.ts.
 const ext = import.meta.url.endsWith('.ts') ? 'ts' : 'js';
 
+/**
+ * `DB_SSL=true` criptografa a conexão (bancos gerenciados, ex.: Supabase). O certificado do
+ * provedor não vem de uma CA pública, então não é verificado; a conexão continua cifrada.
+ */
+export function sslOption(env: NodeJS.ProcessEnv): false | { rejectUnauthorized: boolean } {
+  return env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false;
+}
+
 /** Conexão + entities. Usada pela API (Nest); não carrega migrations. */
 export function buildDataSourceOptions(env: NodeJS.ProcessEnv = process.env): DataSourceOptions {
   const url = env.DATABASE_URL || undefined;
@@ -24,6 +32,9 @@ export function buildDataSourceOptions(env: NodeJS.ProcessEnv = process.env): Da
     // Schema é sempre controlado por migrations, nunca por synchronize.
     synchronize: false,
     logging: env.DB_LOGGING === 'true',
+    ssl: sslOption(env),
+    // Poolers gerenciados (ex.: Supabase gratuito) aceitam poucas conexões: DB_POOL_MAX por máquina.
+    extra: { max: Number(env.DB_POOL_MAX ?? 10) },
   };
 }
 

@@ -21,7 +21,7 @@ export const STORE_URLS = {
 };
 
 /** Link curto exibido na imagem (idealmente uma página que redireciona para a loja certa). */
-export const SHARE_URL = process.env.EXPO_PUBLIC_SHARE_URL ?? 'votocola.app';
+export const SHARE_URL = process.env.EXPO_PUBLIC_SHARE_URL ?? 'votocola.nexti.dev';
 
 export const STORE_URL = Platform.OS === 'ios' ? STORE_URLS.ios : STORE_URLS.android;
 
