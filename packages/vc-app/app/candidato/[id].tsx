@@ -2,6 +2,7 @@ import { useLocalSearchParams } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, View } from 'react-native';
+import { suppressAppOpen } from '@/ads';
 import { fetchCandidate, type Candidate } from '@/api';
 import { canVoteIn } from '@/domain/colinha';
 import { stateName } from '@/domain/states';
@@ -137,7 +138,10 @@ export default function CandidateScreen() {
               <Button
                 variant="secondary"
                 label="Ler plano completo (PDF)"
-                onPress={() => WebBrowser.openBrowserAsync(c.planUrl!)}
+                onPress={() => {
+                  suppressAppOpen();
+                  WebBrowser.openBrowserAsync(c.planUrl!);
+                }}
               />
             ) : null}
           </View>

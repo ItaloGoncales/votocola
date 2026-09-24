@@ -1,4 +1,5 @@
 import { Linking, Pressable, View } from 'react-native';
+import { suppressAppOpen } from '@/ads';
 import type { SocialLink } from '@/api';
 import { SocialIcon } from '../atoms/social-icon';
 import { Text } from '../atoms/text';
@@ -30,7 +31,10 @@ export function SocialLinks({ links }: { links: SocialLink[] }) {
             key={link.url}
             accessibilityRole="link"
             accessibilityLabel={`Abrir ${LABELS[link.network] ?? link.network}`}
-            onPress={() => Linking.openURL(link.url).catch(() => {})}
+            onPress={() => {
+              suppressAppOpen();
+              Linking.openURL(link.url).catch(() => {});
+            }}
             className="h-10 flex-row items-center gap-2 rounded-full border border-line bg-raised px-4 active:bg-line"
           >
             <SocialIcon network={link.network} />

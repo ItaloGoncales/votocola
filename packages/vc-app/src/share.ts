@@ -1,4 +1,5 @@
 import * as Sharing from 'expo-sharing';
+import { suppressAppOpen } from '@/ads';
 import type { RefObject } from 'react';
 import { Alert, type View } from 'react-native';
 import { captureRef } from 'react-native-view-shot';
@@ -12,6 +13,7 @@ export async function shareColinha(ref: RefObject<View | null>) {
       Alert.alert('Compartilhar', 'Compartilhamento indisponível neste aparelho.');
       return;
     }
+    suppressAppOpen();
     await Sharing.shareAsync(uri, {
       mimeType: 'image/png',
       dialogTitle: 'Compartilhar minha colinha',

@@ -15,14 +15,26 @@
       },
       "env": {
         "EXPO_PUBLIC_API_URL": "https://votocola.nexti.dev/graphql",
-        "EXPO_PUBLIC_SHARE_URL": "votocola.nexti.dev"
+        "EXPO_PUBLIC_SHARE_URL": "votocola.nexti.dev",
+        "EXPO_PUBLIC_ADMOB_BANNER_ANDROID": "ca-app-pub-6785676183694375/7069198508",
+        "EXPO_PUBLIC_ADMOB_INTERSTITIAL_ANDROID": "ca-app-pub-6785676183694375/3663296806",
+        "EXPO_PUBLIC_ADMOB_APP_OPEN_ANDROID": "ca-app-pub-6785676183694375/6706236429",
+        "EXPO_PUBLIC_ADMOB_BANNER_IOS": "ca-app-pub-6785676183694375/8149422446",
+        "EXPO_PUBLIC_ADMOB_INTERSTITIAL_IOS": "ca-app-pub-6785676183694375/8041525512",
+        "EXPO_PUBLIC_ADMOB_APP_OPEN_IOS": "ca-app-pub-6785676183694375/4443035168"
       }
     },
     "production": {
       "autoIncrement": true,
       "env": {
         "EXPO_PUBLIC_API_URL": "https://votocola.nexti.dev/graphql",
-        "EXPO_PUBLIC_SHARE_URL": "votocola.nexti.dev"
+        "EXPO_PUBLIC_SHARE_URL": "votocola.nexti.dev",
+        "EXPO_PUBLIC_ADMOB_BANNER_ANDROID": "ca-app-pub-6785676183694375/7069198508",
+        "EXPO_PUBLIC_ADMOB_INTERSTITIAL_ANDROID": "ca-app-pub-6785676183694375/3663296806",
+        "EXPO_PUBLIC_ADMOB_APP_OPEN_ANDROID": "ca-app-pub-6785676183694375/6706236429",
+        "EXPO_PUBLIC_ADMOB_BANNER_IOS": "ca-app-pub-6785676183694375/8149422446",
+        "EXPO_PUBLIC_ADMOB_INTERSTITIAL_IOS": "ca-app-pub-6785676183694375/8041525512",
+        "EXPO_PUBLIC_ADMOB_APP_OPEN_IOS": "ca-app-pub-6785676183694375/4443035168"
       }
     }
   },

@@ -38,4 +38,8 @@ export const AD_UNITS = {
     ios: process.env.EXPO_PUBLIC_ADMOB_INTERSTITIAL_IOS,
     android: process.env.EXPO_PUBLIC_ADMOB_INTERSTITIAL_ANDROID,
   }),
+  appOpen: Platform.select({
+    ios: process.env.EXPO_PUBLIC_ADMOB_APP_OPEN_IOS,
+    android: process.env.EXPO_PUBLIC_ADMOB_APP_OPEN_ANDROID,
+  }),
 };

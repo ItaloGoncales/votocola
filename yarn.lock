@@ -5059,6 +5059,7 @@ __metadata:
     expo-sharing: "npm:~57.0.21"
     expo-splash-screen: "npm:~57.0.9"
     expo-status-bar: "npm:~57.0.1"
+    expo-tracking-transparency: "npm:~57.0.2"
     expo-web-browser: "npm:~57.0.3"
     jest: "npm:~29.7.0"
     jest-expo: "npm:~57.0.5"
@@ -7408,6 +7409,16 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10c0/9be0bec9bb14a9914945aa072d5a14355f6c65d12909dc4351814b5d15c2818af064c5f63e35592f32a08a0c43efc4c42c87247a05e6011ee58360a4551d723e
+  languageName: node
+  linkType: hard
+
+"expo-tracking-transparency@npm:~57.0.2":
+  version: 57.0.2
+  resolution: "expo-tracking-transparency@npm:57.0.2"
+  peerDependencies:
+    expo: "*"
+    react-native: "*"
+  checksum: 10c0/6e864e01a4f7b43460665c05d3e1f2a2c861a906a66d7cf72a9f6cac8e80f890c88780bd9173dc2e7c9880ad1adfcfc14be882eff0cf59cc3911e8ec6ce6e1e8
   languageName: node
   linkType: hard
 

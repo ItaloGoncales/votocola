@@ -1,12 +1,15 @@
 import Constants, { ExecutionEnvironment } from 'expo-constants';
-import { Platform, View } from 'react-native';
+import { AppState, Platform, View, type AppStateStatus } from 'react-native';
 import { AD_UNITS } from '@/config';
+import { store } from '@/store';
+import { COLD_START_WINDOW_MS, isExpired, shouldShowAppOpen } from './policy';
 
 type AdsModule = typeof import('react-native-google-mobile-ads');
 
 /**
  * O AdMob é nativo: não existe no Expo Go nem na web. Lá os anúncios viram no-op; num
- * development build (`expo run:android|ios` ou EAS) eles funcionam normalmente.
+ * development build (`expo run:android|ios` ou EAS) eles funcionam normalmente. Sem as variáveis
+ * EXPO_PUBLIC_ADMOB_* (builds de desenvolvimento), usa os IDs de teste do Google.
  */
 const ads: AdsModule | null = (() => {
   if (Platform.OS === 'web') return null;
@@ -23,35 +26,145 @@ const ads: AdsModule | null = (() => {
 const INTERSTITIAL_COOLDOWN_MS = 90_000;
 let lastInterstitialAt = 0;
 let interstitial: ReturnType<AdsModule['InterstitialAd']['createForAdRequest']> | null = null;
-let loaded = false;
+let interstitialLoaded = false;
 
 function loadInterstitial() {
   if (!ads) return;
-  const unit = AD_UNITS.interstitial ?? ads.TestIds.INTERSTITIAL;
-  interstitial = ads.InterstitialAd.createForAdRequest(unit);
-  loaded = false;
+  interstitial = ads.InterstitialAd.createForAdRequest(
+    AD_UNITS.interstitial ?? ads.TestIds.INTERSTITIAL,
+  );
+  interstitialLoaded = false;
   interstitial.addAdEventListener(ads.AdEventType.LOADED, () => {
-    loaded = true;
+    interstitialLoaded = true;
   });
   interstitial.addAdEventListener(ads.AdEventType.CLOSED, loadInterstitial);
   interstitial.addAdEventListener(ads.AdEventType.ERROR, () => {
-    loaded = false;
+    interstitialLoaded = false;
   });
   interstitial.load();
 }
 
+// ---- Anúncio de abertura (ao abrir o app e ao voltar para ele) ----
+const launchedAt = Date.now();
+let appOpen: ReturnType<AdsModule['AppOpenAd']['createForAdRequest']> | null = null;
+let appOpenLoadedAt: number | null = null;
+let appOpenShowing = false;
+let lastAppOpenAt = 0;
+let coldStartPending = true;
+let returningFromOwnAction = false;
+let appState: AppStateStatus = AppState.currentState;
+
+function loadAppOpen() {
+  if (!ads) return;
+  appOpen = ads.AppOpenAd.createForAdRequest(AD_UNITS.appOpen ?? ads.TestIds.APP_OPEN);
+  appOpenLoadedAt = null;
+  appOpen.addAdEventListener(ads.AdEventType.LOADED, () => {
+    appOpenLoadedAt = Date.now();
+    // Abertura "a frio": só se carregar rápido, com o app ainda na frente.
+    if (
+      coldStartPending &&
+      Date.now() - launchedAt < COLD_START_WINDOW_MS &&
+      appState === 'active'
+    ) {
+      maybeShowAppOpen();
+    }
+    coldStartPending = false;
+  });
+  appOpen.addAdEventListener(ads.AdEventType.CLOSED, () => {
+    appOpenShowing = false;
+    loadAppOpen();
+  });
+  appOpen.addAdEventListener(ads.AdEventType.ERROR, () => {
+    appOpenShowing = false;
+    appOpenLoadedAt = null;
+  });
+  appOpen.load();
+}
+
+function maybeShowAppOpen() {
+  if (!appOpen || appOpenShowing) return;
+  const now = Date.now();
+  if (isExpired(appOpenLoadedAt, now)) {
+    loadAppOpen();
+    return;
+  }
+  const show = shouldShowAppOpen({
+    now,
+    onboarded: store.get().onboarded,
+    loadedAt: appOpenLoadedAt,
+    lastShownAt: lastAppOpenAt,
+    lastInterstitialAt,
+    returningFromOwnAction: false,
+  });
+  if (!show) return;
+  appOpenShowing = true;
+  lastAppOpenAt = now;
+  appOpen.show().catch(() => {
+    appOpenShowing = false;
+  });
+}
+
+function onAppStateChange(next: AppStateStatus) {
+  const cameBack = appState.match(/inactive|background/) && next === 'active';
+  appState = next;
+  if (!cameBack) return;
+  // Voltando do compartilhamento, do PDF ou de um link aberto pelo próprio app: não interromper.
+  if (returningFromOwnAction) {
+    returningFromOwnAction = false;
+    return;
+  }
+  maybeShowAppOpen();
+}
+
+/**
+ * Chamar antes de abrir algo fora do app (compartilhar, PDF, navegador, redes sociais): a volta
+ * para o app não dispara anúncio de abertura.
+ */
+export function suppressAppOpen() {
+  returningFromOwnAction = true;
+}
+
+let started = false;
+
+/** iPhone: pede a permissão de rastreamento (ATT) antes de carregar anúncios, como a Apple exige. */
+async function startAds() {
+  if (!ads || started) return;
+  started = true;
+  if (Platform.OS === 'ios') {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const att =
+        require('expo-tracking-transparency') as typeof import('expo-tracking-transparency');
+      await att.requestTrackingPermissionsAsync(); // só pergunta uma vez; depois devolve a resposta
+    } catch {
+      // Sem ATT, o AdMob segue com anúncios não personalizados.
+    }
+  }
+  try {
+    await ads.default().initialize();
+    loadInterstitial();
+    loadAppOpen();
+  } catch {
+    started = false;
+  }
+}
+
 export function initAds() {
   if (!ads) return;
-  ads
-    .default()
-    .initialize()
-    .then(loadInterstitial)
-    .catch(() => {});
+  AppState.addEventListener('change', onAppStateChange);
+  // Na primeira abertura, o iPhone só pergunta sobre rastreamento depois das boas-vindas.
+  if (Platform.OS === 'ios' && !store.get().onboarded) return;
+  startAds();
+}
+
+/** Chamado ao sair das boas-vindas ("Montar minha colinha"). */
+export function onOnboardingFinished() {
+  startAds();
 }
 
 /** Interstitial ao adicionar candidato (respeitando o intervalo mínimo). */
 export function showInterstitial() {
-  if (!interstitial || !loaded) return;
+  if (!interstitial || !interstitialLoaded) return;
   if (Date.now() - lastInterstitialAt < INTERSTITIAL_COOLDOWN_MS) return;
   lastInterstitialAt = Date.now();
   interstitial.show().catch(() => {});

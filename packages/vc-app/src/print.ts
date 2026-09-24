@@ -1,6 +1,7 @@
 import { File, Paths } from 'expo-file-system';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
+import { suppressAppOpen } from '@/ads';
 import { Alert } from 'react-native';
 import type { BallotSlot } from '@/api';
 import { SHARE_URL } from '@/config';
@@ -102,6 +103,7 @@ export async function shareColinhaPdf(uf: string, ballot: BallotSlot[], picks: P
     if (named.exists) named.delete();
     named.create();
     named.write(base64ToBytes(base64));
+    suppressAppOpen();
     if (!(await Sharing.isAvailableAsync())) {
       await Print.printAsync({ uri: named.uri });
       return;

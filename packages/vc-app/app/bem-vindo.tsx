@@ -2,6 +2,7 @@ import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import { ScrollView, useWindowDimensions, View } from 'react-native';
+import { onOnboardingFinished } from '@/ads';
 import { LEGAL_URLS } from '@/config';
 import { countdownLabel } from '@/domain/election';
 import { store } from '@/store';
@@ -24,6 +25,7 @@ export default function WelcomeScreen() {
 
   const start = () => {
     store.finishOnboarding();
+    onOnboardingFinished();
     router.replace('/estado');
   };
 

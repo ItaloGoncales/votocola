@@ -2,12 +2,6 @@ import * as api from '@/api';
 import { store } from '@/store';
 import { countOnce } from '@/track';
 
-jest.mock('@react-native-async-storage/async-storage', () => ({
-  setItem: jest.fn(() => Promise.resolve()),
-  getItem: jest.fn(() => Promise.resolve(null)),
-  removeItem: jest.fn(() => Promise.resolve()),
-}));
-
 describe('countOnce', () => {
   it('sends +1 only the first time per candidate and kind, with no device identifier', () => {
     const spy = jest.spyOn(api, 'trackCandidate').mockImplementation(() => {});
